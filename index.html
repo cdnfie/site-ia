@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel de IAs 2026</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #10172c;
+      --card: rgba(255,255,255,0.06);
+      --text: #f5f7ff;
+      --muted: #b8c0e0;
+      --line: rgba(255,255,255,0.12);
+      --accent: #7c9cff;
+      --accent-2: #4de2c5;
+      --warning: #ffd166;
+      --shadow: 0 22px 55px rgba(0,0,0,.30);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(124,156,255,0.15), transparent 24%),
+        radial-gradient(circle at top right, rgba(77,226,197,0.11), transparent 22%),
+        linear-gradient(180deg, #0b1020 0%, #0d1428 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 42px 0 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+    }
+
+    .topbar {
+      display: flex;
+      gap: 18px;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 880px;
+    }
+
+    .eyebrow {
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.05;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin: 24px 0 8px;
+      align-items: stretch;
+    }
+
+    .input, .select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 14px 16px;
+      border-radius: 14px;
+      outline: none;
+      font-size: 14px;
+      min-height: 54px;
+    }
+
+    .select {
+      appearance: auto;
+      -webkit-appearance: menulist;
+      -moz-appearance: menulist;
+      background: rgba(255,255,255,0.08);
+      color: #ffffff;
+      padding-right: 16px;
+    }
+
+    .select option {
+      color: #111111;
+      background: #ffffff;
+      white-space: normal;
+    }
+
+    @media (max-width: 980px) {
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 24px 0 8px;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    main {
+      padding: 28px 0 56px;
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 22px;
+    }
+
+    .panel {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel h2, .panel h3 {
+      margin: 0 0 10px;
+    }
+
+    .panel p, .panel li {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .category-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .category-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .category-block {
+      margin-top: 34px;
+    }
+
+    .section-header {
+      margin: 0 0 18px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .section-kicker {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: .11em;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .section-header h2 {
+      margin: 0;
+      font-size: 25px;
+    }
+
+    .section-header p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 860px;
+      line-height: 1.7;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform .18s ease, border-color .18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(124,156,255,0.4);
+    }
+
+    .card.hidden {
+      display: none;
+    }
+
+    .row.top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .title h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .title small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .badge {
+      width: fit-content;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      background: rgba(124,156,255,0.18);
+      color: #dfe7ff;
+      border: 1px solid rgba(124,156,255,0.24);
+    }
+
+    .score {
+      min-width: 96px;
+      text-align: right;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 10px 12px;
+    }
+
+    .score strong {
+      display: block;
+      font-size: 20px;
+      color: var(--warning);
+    }
+
+    .score span {
+      color: #ffe7a0;
+      font-size: 14px;
+      letter-spacing: .05em;
+    }
+
+    .desc {
+      margin: 0;
+      color: #e4e8f8;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .meta div, .market-note {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .meta strong, .market-note strong {
+      display: block;
+      font-size: 12px;
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 6px;
+    }
+
+    .meta span, .market-note span {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: auto;
+    }
+
+    .btn {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .btn:hover {
+      opacity: .93;
+      transform: translateY(-1px);
+    }
+
+    .btn.primary {
+      background: linear-gradient(90deg, var(--accent), #91a8ff);
+      color: #08101f;
+    }
+
+    .notice {
+      margin-top: 34px;
+      padding: 18px 20px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 209, 102, 0.25);
+      background: rgba(255, 209, 102, 0.08);
+      color: #fff0c7;
+      line-height: 1.75;
+    }
+
+    footer {
+      margin: 34px 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+      padding-bottom: 24px;
+    }
+
+    @media (max-width: 1040px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .intro, .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .toolbar, .grid, .meta, .intro, .stats {
+        grid-template-columns: 1fr;
+      }
+      .row.top {
+        flex-direction: column;
+      }
+      .score {
+        text-align: left;
+      }
+    }
+  
+    .ranking-panel, .live-panel {
+      margin: 0 0 26px;
+      padding: 20px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+      box-shadow: var(--shadow);
+    }
+
+    .ranking-panel h3, .live-panel h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+
+    .ranking-panel p, .live-panel p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .ranking-list {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .rank-item {
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .rank-pos {
+      display: inline-flex;
+      min-width: 34px;
+      height: 34px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(124,156,255,0.20);
+      border: 1px solid rgba(124,156,255,0.28);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .rank-item h4 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .rank-item small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .rank-item .mini {
+      font-size: 12px;
+      color: #dfe7ff;
+      line-height: 1.5;
+    }
+
+    .live-status {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .pulse {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 0 rgba(77,226,197,0.45);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(77,226,197,0.45); }
+      70% { box-shadow: 0 0 0 12px rgba(77,226,197,0); }
+      100% { box-shadow: 0 0 0 0 rgba(77,226,197,0); }
+    }
+
+    .live-grid {
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 14px;
+    }
+
+    .live-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .live-box strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .live-box ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text);
+    }
+
+    .live-box li {
+      margin: 0 0 8px;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .live-box .muted {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .refresh-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+  
+    .top-ranking {
+      margin: 34px 0 30px;
+      padding: 24px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, rgba(124,156,255,0.16), rgba(255,255,255,0.05));
+      box-shadow: var(--shadow);
+    }
+
+    .top-ranking h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+    }
+
+    .top-ranking p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .top-ranking-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .top-ranking-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      padding: 18px;
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .top-ranking-medal {
+      font-size: 26px;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .top-ranking-pos {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: rgba(124,156,255,0.20);
+      border: 1px solid rgba(124,156,255,0.28);
+      color: var(--text);
+    }
+
+    .top-ranking-card h3 {
+      margin: 0 0 6px;
+      font-size: 19px;
+    }
+
+    .top-ranking-card small {
+      display: block;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .mini-note {
+      margin: 0 0 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #e4e8f8;
+    }
+
+    .rank-bar {
+      margin-top: auto;
+      height: 10px;
+      width: 100%;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .rank-bar span {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    @media (max-width: 1100px) {
+      .top-ranking-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .top-ranking-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+  
+    .rating-stars {
+      font-family: "Segoe UI Symbol", "Arial Unicode MS", "Noto Sans Symbols", Arial, sans-serif;
+      letter-spacing: 2px;
+      white-space: nowrap;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="topbar">
+        <div class="brand">
+          <span class="eyebrow"></span>
+          <h1>Painel das IAs mais fortes do mercado</h1>
+          <p></p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input id="searchInput" class="input" type="text" placeholder="Buscar por nome, empresa, categoria, recurso ou destaque..." />
+</div>
+
+      <div class="stats">
+        <div class="stat"><strong id="visibleCount">23</strong><span>Total de IAs cadastradas</span></div>
+        <div class="stat"><strong>4</strong><span>categorias disponíveis</span></div>
+        <div class="stat"><strong>0–5</strong><span>Escala de avaliação comparativa por ferramenta</span></div>
+        <div class="stat"><strong>Abr/2026</strong><span>Ano de referência</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="top-ranking">
+      <h2>Top 5 IAs mais usadas atualmente</h2>
+      <p>Ranking visual baseado no cenário público mais recente de uso e tráfego entre plataformas de IA.</p>
+      <div class="top-ranking-grid">
+        <article class="top-ranking-card">
+          <div class="top-ranking-medal">🥇</div>
+          <div class="top-ranking-pos">1</div>
+          <h3>ChatGPT</h3>
+          <small>OpenAI</small>
+          <p class="mini-note">Líder geral em uso, alcance e presença de mercado.</p>
+          <div class="rank-bar"><span style="width:100%"></span></div>
+        </article>
+
+        <article class="top-ranking-card">
+          <div class="top-ranking-medal">🥈</div>
+          <div class="top-ranking-pos">2</div>
+          <h3>Gemini</h3>
+          <small>Google</small>
+          <p class="mini-note">Segundo maior entre os assistentes generalistas.</p>
+          <div class="rank-bar"><span style="width:84%"></span></div>
+        </article>
+
+        <article class="top-ranking-card">
+          <div class="top-ranking-medal">🥉</div>
+          <div class="top-ranking-pos">3</div>
+          <h3>Claude</h3>
+          <small>Anthropic</small>
+          <p class="mini-note">Muito forte em uso profissional, análise e escrita.</p>
+          <div class="rank-bar"><span style="width:72%"></span></div>
+        </article>
+
+        <article class="top-ranking-card">
+          <div class="top-ranking-medal">🏅</div>
+          <div class="top-ranking-pos">4</div>
+          <h3>Grok</h3>
+          <small>xAI</small>
+          <p class="mini-note">Ganhou tração relevante e entrou entre os líderes.</p>
+          <div class="rank-bar"><span style="width:63%"></span></div>
+        </article>
+
+        <article class="top-ranking-card">
+          <div class="top-ranking-medal">🏅</div>
+          <div class="top-ranking-pos">5</div>
+          <h3>DeepSeek</h3>
+          <small>DeepSeek</small>
+          <p class="mini-note">Figura entre os nomes mais acessados do ranking atual.</p>
+          <div class="rank-bar"><span style="width:57%"></span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="intro">
+      <div class="panel">
+        <h2>Como ler este painel</h2>
+        <p>
+          A nota exibida ao lado de cada IA não representa um benchmark oficial único. Ela funciona como
+          uma referência prática comparativa, combinando presença de mercado, maturidade do produto,
+          amplitude de casos de uso e aceitação entre usuários avançados.
+        </p>
+        <div class="category-list">
+          <a class="category-chip" href="#assistentes-gerais">Assistentes gerais</a>
+          <a class="category-chip" href="#coding">Programação</a>
+          <a class="category-chip" href="#visual">Imagem e vídeo</a>
+          <a class="category-chip" href="#docs-prod">Documentação</a>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Legenda rápida das notas</h3>
+        <p><strong>4.8 a 5.0:</strong> referência de mercado ou elite da categoria.</p>
+        <p><strong>4.4 a 4.7:</strong> muito forte e competitivo no uso profissional.</p>
+        <p><strong>4.0 a 4.3:</strong> sólido, relevante e bom em nichos ou cenários específicos.</p>
+        <p><strong>Abaixo de 4.0:</strong> bom produto, mas com menor dominância comparativa hoje.</p>
+      </div>
+    </section>
+
+    
+    <section class="category-block" id="assistentes-gerais">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker">Categoria</span>
+          <h2>Assistentes gerais, texto e pesquisa</h2>
+          <p>Ferramentas mais completas para conversa, análise, pesquisa, escrita, documentos e uso geral.</p>
+        </div>
+      </div>
+      <div class="grid">
+        
+        <article class="card" data-category="assistentes-gerais" data-search="chatgpt openai multimodal muito forte para texto, análise, brainstorming, automação, programação, imagens e pesquisa guiada por conversa. uso geral de alta performance amplitude de tarefas em um só lugar liderança ampla em uso geral, multimodalidade e fluxos profissionais">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>ChatGPT</h3><small>OpenAI</small></div>
+              <span class="badge">Multimodal</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.9 de 5">
+              <strong>4.9/5</strong>
+              <span>★★★★⯪</span>
+            </div>
+          </div>
+          <p class="desc">Muito forte para texto, análise, brainstorming, automação, programação, imagens e pesquisa guiada por conversa.</p>
+          <div class="tags"><span class="tag">Texto</span><span class="tag">Pesquisa</span><span class="tag">Multimodal</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Uso geral de alta performance</span></div>
+            <div><strong>Ponto forte</strong><span>Amplitude de tarefas em um só lugar</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Liderança ampla em uso geral, multimodalidade e fluxos profissionais</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://openai.com/chatgpt/" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="assistentes-gerais" data-search="claude anthropic raciocínio forte excelente para escrita longa, análise estruturada, leitura de documentos e resolução de problemas complexos. redação e análise profunda fluxo de trabalho profissional muito forte entre usuários avançados para texto longo, contexto e qualidade de resposta">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Claude</h3><small>Anthropic</small></div>
+              <span class="badge">Raciocínio forte</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.8 de 5">
+              <strong>4.8/5</strong>
+              <span>★★★★⯪</span>
+            </div>
+          </div>
+          <p class="desc">Excelente para escrita longa, análise estruturada, leitura de documentos e resolução de problemas complexos.</p>
+          <div class="tags"><span class="tag">Texto</span><span class="tag">Pesquisa</span><span class="tag">Multimodal</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Redação e análise profunda</span></div>
+            <div><strong>Ponto forte</strong><span>Fluxo de trabalho profissional</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Muito forte entre usuários avançados para texto longo, contexto e qualidade de resposta</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://www.anthropic.com/claude" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="assistentes-gerais" data-search="gemini google ecossistema google muito útil para escrita, planejamento, pesquisa e integração com o ecossistema google. quem usa produtos google pesquisa e produtividade conectada muito competitivo em produtividade, pesquisa e integração com workspace">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Gemini</h3><small>Google</small></div>
+              <span class="badge">Ecossistema Google</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.6 de 5">
+              <strong>4.6/5</strong>
+              <span>★★★★⯪</span>
+            </div>
+          </div>
+          <p class="desc">Muito útil para escrita, planejamento, pesquisa e integração com o ecossistema Google.</p>
+          <div class="tags"><span class="tag">Texto</span><span class="tag">Pesquisa</span><span class="tag">Multimodal</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Quem usa produtos Google</span></div>
+            <div><strong>Ponto forte</strong><span>Pesquisa e produtividade conectada</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Muito competitivo em produtividade, pesquisa e integração com Workspace</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://gemini.google.com/" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="assistentes-gerais" data-search="microsoft copilot microsoft foco corporativo forte para produtividade no trabalho, criação de conteúdo e apoio em ambientes microsoft 365. ambiente corporativo microsoft integração com apps de trabalho alta adoção corporativa, especialmente em organizações já padronizadas em microsoft">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Microsoft Copilot</h3><small>Microsoft</small></div>
+              <span class="badge">Foco corporativo</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.4 de 5">
+              <strong>4.4/5</strong>
+              <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            </div>
+          </div>
+          <p class="desc">Forte para produtividade no trabalho, criação de conteúdo e apoio em ambientes Microsoft 365.</p>
+          <div class="tags"><span class="tag">Texto</span><span class="tag">Pesquisa</span><span class="tag">Multimodal</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Ambiente corporativo Microsoft</span></div>
+            <div><strong>Ponto forte</strong><span>Integração com apps de trabalho</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Alta adoção corporativa, especialmente em organizações já padronizadas em Microsoft</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://www.microsoft.com/en-us/microsoft-365-copilot" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="assistentes-gerais" data-search="perplexity perplexity pesquisa em tempo real muito bom para pesquisa na web com respostas acompanhadas de fontes e links verificáveis. perguntas com verificação rápida resposta com referências muito valorizado quando o foco principal é pesquisa web com referências">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Perplexity</h3><small>Perplexity</small></div>
+              <span class="badge">Pesquisa em tempo real</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.5 de 5">
+              <strong>4.5/5</strong>
+              <span>★★★★⯪</span>
+            </div>
+          </div>
+          <p class="desc">Muito bom para pesquisa na web com respostas acompanhadas de fontes e links verificáveis.</p>
+          <div class="tags"><span class="tag">Texto</span><span class="tag">Pesquisa</span><span class="tag">Multimodal</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Perguntas com verificação rápida</span></div>
+            <div><strong>Ponto forte</strong><span>Resposta com referências</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Muito valorizado quando o foco principal é pesquisa web com referências</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://www.perplexity.ai/" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="assistentes-gerais" data-search="grok xai busca + multimodal assistente conversacional com busca em tempo real, programação, voz e geração de imagem e vídeo. uso geral com pesquisa conectada tempo real e multimodalidade ganha espaço pelo foco em tempo real e recursos multimodais">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Grok</h3><small>xAI</small></div>
+              <span class="badge">Busca + multimodal</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.2 de 5">
+              <strong>4.2/5</strong>
+              <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            </div>
+          </div>
+          <p class="desc">Assistente conversacional com busca em tempo real, programação, voz e geração de imagem e vídeo.</p>
+          <div class="tags"><span class="tag">Texto</span><span class="tag">Pesquisa</span><span class="tag">Multimodal</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Uso geral com pesquisa conectada</span></div>
+            <div><strong>Ponto forte</strong><span>Tempo real e multimodalidade</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Ganha espaço pelo foco em tempo real e recursos multimodais</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://x.ai/grok" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="assistentes-gerais" data-search="le chat mistral ai controle e privacidade assistente forte para pesquisa, análise, agentes e cenários empresariais com mais personalização. uso corporativo com controle customização e operação em escala bem visto por times que priorizam controle, deployment e flexibilidade">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Le Chat</h3><small>Mistral AI</small></div>
+              <span class="badge">Controle e privacidade</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.1 de 5">
+              <strong>4.1/5</strong>
+              <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            </div>
+          </div>
+          <p class="desc">Assistente forte para pesquisa, análise, agentes e cenários empresariais com mais personalização.</p>
+          <div class="tags"><span class="tag">Texto</span><span class="tag">Pesquisa</span><span class="tag">Multimodal</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Uso corporativo com controle</span></div>
+            <div><strong>Ponto forte</strong><span>Customização e operação em escala</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Bem visto por times que priorizam controle, deployment e flexibilidade</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://mistral.ai/products/le-chat" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="assistentes-gerais" data-search="meta ai meta criação e descoberta ia da meta com foco em conversa, criação e experiências conectadas ao ecossistema da empresa. exploração criativa e social criação multimodal simplificada boa presença de mercado, mas ainda menos dominante em workflows profissionais especializados">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Meta AI</h3><small>Meta</small></div>
+              <span class="badge">Criação e descoberta</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 3.9 de 5">
+              <strong>3.9/5</strong>
+              <span>★★★⯪☆</span>
+            </div>
+          </div>
+          <p class="desc">IA da Meta com foco em conversa, criação e experiências conectadas ao ecossistema da empresa.</p>
+          <div class="tags"><span class="tag">Texto</span><span class="tag">Pesquisa</span><span class="tag">Multimodal</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Exploração criativa e social</span></div>
+            <div><strong>Ponto forte</strong><span>Criação multimodal simplificada</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Boa presença de mercado, mas ainda menos dominante em workflows profissionais especializados</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://ai.meta.com/meta-ai/" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+      </div>
+    </section>
+    
+    <section class="category-block" id="coding">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker">Categoria</span>
+          <h2>Programação e engenharia</h2>
+          <p>Ferramentas mais fortes para IDE, agentes de código, codebase, PRs, testes e automação de desenvolvimento.</p>
+        </div>
+      </div>
+      <div class="grid">
+        
+        <article class="card" data-category="coding" data-search="github copilot github padrão corporativo uma das opções mais fortes para sugerir código, conversar no ide, ajudar no terminal e apoiar prs. fluxo de desenvolvimento profissional integração com editor e github referência consolidada em times profissionais e integração nativa com fluxo de desenvolvimento">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>GitHub Copilot</h3><small>GitHub</small></div>
+              <span class="badge">Padrão corporativo</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.8 de 5">
+              <strong>4.8/5</strong>
+              <span>★★★★⯪</span>
+            </div>
+          </div>
+          <p class="desc">Uma das opções mais fortes para sugerir código, conversar no IDE, ajudar no terminal e apoiar PRs.</p>
+          <div class="tags"><span class="tag">Código</span><span class="tag">Agentes</span><span class="tag">IDE/Fluxo</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Fluxo de desenvolvimento profissional</span></div>
+            <div><strong>Ponto forte</strong><span>Integração com editor e GitHub</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Referência consolidada em times profissionais e integração nativa com fluxo de desenvolvimento</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://github.com/features/copilot" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="coding" data-search="cursor cursor editor com agente editor de código focado em agentes, entendimento de codebase, correções e construção assistida. produtividade intensa no ide fluxo rápido para implementar mudanças hoje é um dos favoritos entre power users de desenvolvimento agentivo">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Cursor</h3><small>Cursor</small></div>
+              <span class="badge">Editor com agente</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.9 de 5">
+              <strong>4.9/5</strong>
+              <span>★★★★⯪</span>
+            </div>
+          </div>
+          <p class="desc">Editor de código focado em agentes, entendimento de codebase, correções e construção assistida.</p>
+          <div class="tags"><span class="tag">Código</span><span class="tag">Agentes</span><span class="tag">IDE/Fluxo</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Produtividade intensa no IDE</span></div>
+            <div><strong>Ponto forte</strong><span>Fluxo rápido para implementar mudanças</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Hoje é um dos favoritos entre power users de desenvolvimento agentivo</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://cursor.com/" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="coding" data-search="claude code anthropic agente de código lê a base, altera arquivos, executa testes e ajuda a entregar mudanças com menos trabalho manual. tarefas maiores e multiarquivo execução agentiva de desenvolvimento muito forte para mudanças grandes, terminal, automação e codebase extensa">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Claude Code</h3><small>Anthropic</small></div>
+              <span class="badge">Agente de código</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.8 de 5">
+              <strong>4.8/5</strong>
+              <span>★★★★⯪</span>
+            </div>
+          </div>
+          <p class="desc">Lê a base, altera arquivos, executa testes e ajuda a entregar mudanças com menos trabalho manual.</p>
+          <div class="tags"><span class="tag">Código</span><span class="tag">Agentes</span><span class="tag">IDE/Fluxo</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Tarefas maiores e multiarquivo</span></div>
+            <div><strong>Ponto forte</strong><span>Execução agentiva de desenvolvimento</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Muito forte para mudanças grandes, terminal, automação e codebase extensa</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://www.anthropic.com/product/claude-code" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="coding" data-search="replit agent replit cria apps e sites muito forte para transformar linguagem natural em aplicações, sites e protótipos com deploy rápido. construção acelerada de projetos do prompt ao produto destaca-se em prototipagem rápida e fluxo de construção com deploy simplificado">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Replit Agent</h3><small>Replit</small></div>
+              <span class="badge">Cria apps e sites</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.4 de 5">
+              <strong>4.4/5</strong>
+              <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            </div>
+          </div>
+          <p class="desc">Muito forte para transformar linguagem natural em aplicações, sites e protótipos com deploy rápido.</p>
+          <div class="tags"><span class="tag">Código</span><span class="tag">Agentes</span><span class="tag">IDE/Fluxo</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Construção acelerada de projetos</span></div>
+            <div><strong>Ponto forte</strong><span>Do prompt ao produto</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Destaca-se em prototipagem rápida e fluxo de construção com deploy simplificado</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://replit.com/ai" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="coding" data-search="mistral ai platform mistral ai plataforma para apps focada em desenvolvimento de aplicações de ia com agentes, observabilidade e controle operacional. times que querem controle técnico implantação com governança mais forte para times técnicos que querem compor soluções próprias">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Mistral AI Platform</h3><small>Mistral AI</small></div>
+              <span class="badge">Plataforma para apps</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.2 de 5">
+              <strong>4.2/5</strong>
+              <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            </div>
+          </div>
+          <p class="desc">Focada em desenvolvimento de aplicações de IA com agentes, observabilidade e controle operacional.</p>
+          <div class="tags"><span class="tag">Código</span><span class="tag">Agentes</span><span class="tag">IDE/Fluxo</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Times que querem controle técnico</span></div>
+            <div><strong>Ponto forte</strong><span>Implantação com governança</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Mais forte para times técnicos que querem compor soluções próprias</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://mistral.ai/" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+      </div>
+    </section>
+    
+    <section class="category-block" id="visual">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker">Categoria</span>
+          <h2>Imagem, vídeo e design</h2>
+          <p>Ferramentas voltadas a geração visual, direção de arte, vídeo generativo e criação de peças comerciais.</p>
+        </div>
+      </div>
+      <div class="grid">
+        
+        <article class="card" data-category="visual" data-search="midjourney midjourney imagem premium referência quando o foco é gerar imagens muito impactantes, estilizadas e visualmente refinadas. direção de arte e conceito visual estética forte segue como referência de mercado para estética e impacto visual">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Midjourney</h3><small>Midjourney</small></div>
+              <span class="badge">Imagem premium</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.9 de 5">
+              <strong>4.9/5</strong>
+              <span>★★★★⯪</span>
+            </div>
+          </div>
+          <p class="desc">Referência quando o foco é gerar imagens muito impactantes, estilizadas e visualmente refinadas.</p>
+          <div class="tags"><span class="tag">Imagem</span><span class="tag">Vídeo/Design</span><span class="tag">Criação</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Direção de arte e conceito visual</span></div>
+            <div><strong>Ponto forte</strong><span>Estética forte</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Segue como referência de mercado para estética e impacto visual</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://www.midjourney.com/" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="visual" data-search="adobe firefly adobe criação comercial muito forte para imagem, vídeo, áudio e vetores, com foco em fluxo criativo e uso comercial. design e marketing profissional controle criativo dentro do ecossistema adobe muito valorizado em design profissional e uso comercial integrado ao stack adobe">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Adobe Firefly</h3><small>Adobe</small></div>
+              <span class="badge">Criação comercial</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.6 de 5">
+              <strong>4.6/5</strong>
+              <span>★★★★⯪</span>
+            </div>
+          </div>
+          <p class="desc">Muito forte para imagem, vídeo, áudio e vetores, com foco em fluxo criativo e uso comercial.</p>
+          <div class="tags"><span class="tag">Imagem</span><span class="tag">Vídeo/Design</span><span class="tag">Criação</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Design e marketing profissional</span></div>
+            <div><strong>Ponto forte</strong><span>Controle criativo dentro do ecossistema Adobe</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Muito valorizado em design profissional e uso comercial integrado ao stack Adobe</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://www.adobe.com/products/firefly.html" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="visual" data-search="runway runway vídeo avançado uma das plataformas mais fortes para geração de vídeo com alto nível visual e controle criativo. vídeo generativo e motion qualidade visual e direção entre as líderes em vídeo generativo para creators e times criativos">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Runway</h3><small>Runway</small></div>
+              <span class="badge">Vídeo avançado</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.8 de 5">
+              <strong>4.8/5</strong>
+              <span>★★★★⯪</span>
+            </div>
+          </div>
+          <p class="desc">Uma das plataformas mais fortes para geração de vídeo com alto nível visual e controle criativo.</p>
+          <div class="tags"><span class="tag">Imagem</span><span class="tag">Vídeo/Design</span><span class="tag">Criação</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Vídeo generativo e motion</span></div>
+            <div><strong>Ponto forte</strong><span>Qualidade visual e direção</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Entre as líderes em vídeo generativo para creators e times criativos</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://runwayml.com/" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="visual" data-search="stability ai stability ai ecossistema aberto muito relevante para geração e edição de mídia, especialmente para quem quer mais flexibilidade técnica. customização e uso técnico família stable diffusion continua relevante pelo ecossistema aberto e customização">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Stability AI</h3><small>Stability AI</small></div>
+              <span class="badge">Ecossistema aberto</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.3 de 5">
+              <strong>4.3/5</strong>
+              <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            </div>
+          </div>
+          <p class="desc">Muito relevante para geração e edição de mídia, especialmente para quem quer mais flexibilidade técnica.</p>
+          <div class="tags"><span class="tag">Imagem</span><span class="tag">Vídeo/Design</span><span class="tag">Criação</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Customização e uso técnico</span></div>
+            <div><strong>Ponto forte</strong><span>Família Stable Diffusion</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Continua relevante pelo ecossistema aberto e customização</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://stability.ai/" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="visual" data-search="canva magic studio canva design prático muito útil para unir texto, design, apresentações e geração visual em um fluxo simples. marketing, social e materiais rápidos facilidade de uso muito forte no mercado de produtividade visual e criação rápida">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Canva Magic Studio</h3><small>Canva</small></div>
+              <span class="badge">Design prático</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.4 de 5">
+              <strong>4.4/5</strong>
+              <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            </div>
+          </div>
+          <p class="desc">Muito útil para unir texto, design, apresentações e geração visual em um fluxo simples.</p>
+          <div class="tags"><span class="tag">Imagem</span><span class="tag">Vídeo/Design</span><span class="tag">Criação</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Marketing, social e materiais rápidos</span></div>
+            <div><strong>Ponto forte</strong><span>Facilidade de uso</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Muito forte no mercado de produtividade visual e criação rápida</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://www.canva.com/magic/" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+      </div>
+    </section>
+    
+    <section class="category-block" id="docs-prod">
+      <div class="section-header">
+        <div>
+          <span class="section-kicker">Categoria</span>
+          <h2>Documentação e produtividade</h2>
+          <p>Ferramentas com foco em conhecimento, resumos, documentos, revisão textual e busca organizacional.</p>
+        </div>
+      </div>
+      <div class="grid">
+        
+        <article class="card" data-category="docs-prod" data-search="notion ai notion documentação viva muito forte para documentação, bases de conhecimento, resumos, busca interna e automação com agentes. times que centralizam conhecimento ia dentro do workspace muito usado para knowledge base, notas e produtividade colaborativa">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Notion AI</h3><small>Notion</small></div>
+              <span class="badge">Documentação viva</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.5 de 5">
+              <strong>4.5/5</strong>
+              <span>★★★★⯪</span>
+            </div>
+          </div>
+          <p class="desc">Muito forte para documentação, bases de conhecimento, resumos, busca interna e automação com agentes.</p>
+          <div class="tags"><span class="tag">Docs</span><span class="tag">Produtividade</span><span class="tag">Workspace</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Times que centralizam conhecimento</span></div>
+            <div><strong>Ponto forte</strong><span>IA dentro do workspace</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Muito usado para knowledge base, notas e produtividade colaborativa</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://www.notion.so/product/ai" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="docs-prod" data-search="grammarly grammarly escrita assistida ótimo para melhorar texto, ajustar tom, criar rascunhos e acelerar escrita profissional em vários apps. qualidade textual e revisão assistência contínua na escrita mantém força na camada de revisão, clareza e tom profissional">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Grammarly</h3><small>Grammarly</small></div>
+              <span class="badge">Escrita assistida</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.3 de 5">
+              <strong>4.3/5</strong>
+              <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            </div>
+          </div>
+          <p class="desc">Ótimo para melhorar texto, ajustar tom, criar rascunhos e acelerar escrita profissional em vários apps.</p>
+          <div class="tags"><span class="tag">Docs</span><span class="tag">Produtividade</span><span class="tag">Workspace</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Qualidade textual e revisão</span></div>
+            <div><strong>Ponto forte</strong><span>Assistência contínua na escrita</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Mantém força na camada de revisão, clareza e tom profissional</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://www.grammarly.com/" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="docs-prod" data-search="atlassian rovo atlassian busca organizacional muito útil para buscar conhecimento em ferramentas conectadas, conversar com a base e usar agentes. operação corporativa e knowledge search pesquisa entre apps conectados ganha relevância em empresas já centradas em jira e confluence">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Atlassian Rovo</h3><small>Atlassian</small></div>
+              <span class="badge">Busca organizacional</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.2 de 5">
+              <strong>4.2/5</strong>
+              <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            </div>
+          </div>
+          <p class="desc">Muito útil para buscar conhecimento em ferramentas conectadas, conversar com a base e usar agentes.</p>
+          <div class="tags"><span class="tag">Docs</span><span class="tag">Produtividade</span><span class="tag">Workspace</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Operação corporativa e knowledge search</span></div>
+            <div><strong>Ponto forte</strong><span>Pesquisa entre apps conectados</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Ganha relevância em empresas já centradas em Jira e Confluence</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://www.atlassian.com/software/rovo" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="docs-prod" data-search="coda ai coda docs + apps boa opção para unir documentos, tabelas, automações e ia em um mesmo ambiente de trabalho. times que misturam documentação e operação workspace híbrido com ia boa solução híbrida, embora menos dominante que líderes de categoria">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Coda AI</h3><small>Coda</small></div>
+              <span class="badge">Docs + apps</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.0 de 5">
+              <strong>4.0/5</strong>
+              <span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+            </div>
+          </div>
+          <p class="desc">Boa opção para unir documentos, tabelas, automações e IA em um mesmo ambiente de trabalho.</p>
+          <div class="tags"><span class="tag">Docs</span><span class="tag">Produtividade</span><span class="tag">Workspace</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Times que misturam documentação e operação</span></div>
+            <div><strong>Ponto forte</strong><span>Workspace híbrido com IA</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Boa solução híbrida, embora menos dominante que líderes de categoria</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://coda.io/product/ai" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+        <article class="card" data-category="docs-prod" data-search="microsoft 365 copilot microsoft documentos e trabalho fortíssimo para documentos, resumos, análise e criação de materiais no ecossistema corporativo microsoft. word, excel, powerpoint e e-mails produtividade empresarial integrada muito forte no mercado corporativo para documentos e produtividade integrada">
+          <div class="row top">
+            <div class="title-wrap">
+              <div class="title"><h3>Microsoft 365 Copilot</h3><small>Microsoft</small></div>
+              <span class="badge">Documentos e trabalho</span>
+            </div>
+            <div class="score" aria-label="avaliação de mercado 4.7 de 5">
+              <strong>4.7/5</strong>
+              <span>★★★★⯪</span>
+            </div>
+          </div>
+          <p class="desc">Fortíssimo para documentos, resumos, análise e criação de materiais no ecossistema corporativo Microsoft.</p>
+          <div class="tags"><span class="tag">Docs</span><span class="tag">Produtividade</span><span class="tag">Workspace</span></div>
+          <div class="meta">
+            <div><strong>Melhor para</strong><span>Word, Excel, PowerPoint e e-mails</span></div>
+            <div><strong>Ponto forte</strong><span>Produtividade empresarial integrada</span></div>
+          </div>
+          <div class="market-note">
+            <strong>Referência de mercado</strong>
+            <span>Muito forte no mercado corporativo para documentos e produtividade integrada</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="https://www.microsoft.com/en-us/microsoft-365-copilot" target="_blank" rel="noopener">Abrir site oficial</a>
+          </div>
+        </article>
+        
+      </div>
+    </section>
+    
+
+
+
+    <footer>Painel HTML com ranking visível em destaque, busca e filtros.</footer>
+  </main>
+
+  
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const useFilter = document.getElementById('useFilter');
+    const cards = [...document.querySelectorAll('.card')];
+    const visibleCount = document.getElementById('visibleCount');
+    const lastUpdated = document.getElementById('lastUpdated');
+    const liveStatusText = document.getElementById('liveStatusText');
+    const liveRankingList = document.getElementById('liveRankingList');
+
+    function normalize(value) {
+      return (value || '').toLowerCase().trim();
+    }
+
+    function applyFilters() {
+      const q = normalize(searchInput.value);
+      const category = 'all';
+      const use = normalize(useFilter.value);
+
+      let visible = 0;
+
+      cards.forEach(card => {
+        const c = normalize(card.dataset.category);
+        const f = normalize(card.dataset.focus);
+        const s = normalize((card.dataset.search || '') + ' ' + (card.innerText || ''));
+
+        const matchCategory = category === 'all' || c === category;
+        const matchUse = use === 'all' || f.includes(use);
+        const matchSearch = !q || s.includes(q);
+
+        const show = matchCategory && matchUse && matchSearch;
+        card.classList.toggle('hidden', !show);
+        if (show) visible++;
+      });
+
+      visibleCount.textContent = visible;
+    }
+
+    function updateTimestamp(extra = '') {
+      const now = new Date();
+      lastUpdated.textContent = now.toLocaleString('pt-BR') + (extra ? ' - ' + extra : '');
+    }
+
+    async function refreshLiveData() {
+      updateTimestamp('checagem local concluída');
+      liveStatusText.textContent = 'Monitoramento ativo no navegador';
+
+      // Estrutura pronta para consumo de um endpoint JSON real.
+      // Exemplo esperado:
+      // {
+      //   "ranking": ["ChatGPT", "Gemini", "Claude", "Grok", "Perplexity"]
+      // }
+      const endpoint = window.AI_RANKING_ENDPOINT || '';
+
+      if (!endpoint) {
+        return;
+      }
+
+      try {
+        const response = await fetch(endpoint, { cache: 'no-store' });
+        if (!response.ok) throw new Error('Falha ao consultar endpoint');
+        const data = await response.json();
+
+        if (Array.isArray(data.ranking) && data.ranking.length) {
+          liveRankingList.innerHTML = data.ranking
+            .slice(0, 5)
+            .map((name, index) => `<li>${index + 1}. ${name}</li>`)
+            .join('');
+          updateTimestamp('dados externos recebidos');
+          liveStatusText.textContent = 'Dados externos carregados com sucesso';
+        }
+      } catch (error) {
+        liveStatusText.textContent = 'Monitoramento ativo, mas sem endpoint externo válido';
+      }
+    }
+
+    searchInput.addEventListener('input', applyFilters);
+    useFilter.addEventListener('change', applyFilters);
+
+    applyFilters();
+    refreshLiveData();
+    setInterval(refreshLiveData, 10 * 60 * 1000);
+  </script>
+</body>
+
+</html>
